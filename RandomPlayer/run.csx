@@ -1,6 +1,6 @@
 using System.Net;
 
-public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log)
+public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 {
     log.Info("Game engine has requested an action from this player.");
 

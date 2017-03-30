@@ -1,12 +1,15 @@
 using System.Net;
 
-public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log)
+public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 {
-    log.Info("C# HTTP trigger function processed a request.");
+    log.Info("Game starting");
 
     // parse query parameter
     string player1URL = GetPlayer1URL(req);
     string player2URL = GetPlayer2URL(req);
+
+    log.Info("Player 1 is at URL " + player1URL);
+    log.Info("Player 2 is at URL " + player2URL);
 
     return req.CreateResponse(HttpStatusCode.OK, "Game Complete");
 }
