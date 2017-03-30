@@ -1,4 +1,5 @@
 using System.Net;
+using RestSharp;
 
 public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 {
@@ -50,7 +51,7 @@ private static string DetermineGameStatus(string player1Move, string player2Move
 
 private static string GetMoveFromPlayer(string playerUrl)
 {
-    /*var client = new RestClient(playerUrl);
+    var client = new RestClient(playerUrl);
 
     var request = new RestRequest(Method.GET);
 
@@ -58,21 +59,7 @@ private static string GetMoveFromPlayer(string playerUrl)
 
     var response = client.Execute(request);
 
-    return response.Content;*/
-
-    string move = "Player Forfiets";
-    int randomNumber = new Random().Next(0, 3);
-    
-    if(randomNumber == 0)
-        move = "Rock";
-
-    if(randomNumber == 1)
-        move = "Paper";
-
-    if(randomNumber == 2)
-        move = "Scissors";
-
-    return move;
+    return response.Content;
 }
 
 private static string GetPlayer1URL(HttpRequestMessage req)
