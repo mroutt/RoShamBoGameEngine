@@ -25,7 +25,7 @@ public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
         gameStatus = DetermineWinner(player1Move, player2Move);
         log.Info(gameStatus);
     }
-    while(gameStatus != "Draw");
+    while(gameStatus == "Draw");
 
     return req.CreateResponse(HttpStatusCode.OK, gameStatus);
 }
