@@ -22,7 +22,7 @@ public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
         string player2Move = GetMoveFromPlayer(player2URL);
         log.Info("Player2 chooses " + player2Move);
 
-        gameStatus = DetermineWinner(player1Move, player2Move);
+        gameStatus = DetermineGameStatus(player1Move, player2Move);
         log.Info(gameStatus);
     }
     while(gameStatus == "Draw");
@@ -46,7 +46,7 @@ private static string DetermineGameStatus(string player1Move, string player2Move
     if(player1Move == "Scissors" && player2Move == "Paper")
        winningPlayer = "Player 1";
 
-    return winningPlayer + "Wins";
+    return winningPlayer + " Wins";
 }
 
 private static string GetMoveFromPlayer(string playerUrl)
