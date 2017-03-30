@@ -8,7 +8,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     string player1URL = GetPlayer1URL(req);
     string player2URL = GetPlayer2URL(req);
 
-    req.CreateResponse(HttpStatusCode.OK, "Game Complete");
+    return req.CreateResponse(HttpStatusCode.OK, "Game Complete");
 }
 
 private static string GetPlayer1URL(HttpRequestMessage req)
