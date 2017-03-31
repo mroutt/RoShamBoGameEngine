@@ -85,14 +85,14 @@ private static string GetMoveFromPlayer(string playerUrl)
     return response.Content;
 }
 
-private static string GetPlayer1URL(HttpRequestMessage req)
+private static string GetPlayer1Url(HttpRequestMessage req)
 {
     return req.GetQueryNameValuePairs()
     .FirstOrDefault(q => string.Compare(q.Key, "Player1URL", true) == 0)
     .Value;
 }
 
-private static string GetPlayer2URL(HttpRequestMessage req)
+private static string GetPlayer2Url(HttpRequestMessage req)
 {
     return req.GetQueryNameValuePairs()
     .FirstOrDefault(q => string.Compare(q.Key, "Player2URL", true) == 0)
