@@ -2,7 +2,7 @@ using System.Net;
 
 public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 {
-    var method = req.Method();
+    var method = req.Method;
 
     if(method == HttpMethod.Get)
         return GetResponseToMoveRequest;
