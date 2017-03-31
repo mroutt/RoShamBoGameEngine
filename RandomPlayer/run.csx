@@ -10,10 +10,10 @@ public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
     return ReceiveGameEvent(req, log);
 }
 
-private static void ReceiveGameEvent(HttpRequestMessage req, TraceWriter log)
+private static HttpResponseMessage ReceiveGameEvent(HttpRequestMessage req, TraceWriter log)
 {
     log.Info("Game engine has posted event with message: " + req.Content);
-    req.CreateResponse(HttpStatusCode.Ok);
+    return req.CreateResponse(HttpStatusCode.Ok);
 }
 
 private static HttpResponseMessage GetResponseToMoveRequest(HttpRequestMessage req, TraceWriter log)
