@@ -5,7 +5,7 @@ public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
     var method = req.Method;
 
     if(method == HttpMethod.Get)
-        return GetResponseToMoveRequest;
+        return GetResponseToMoveRequest(req, log);
 
     return ReceiveGameEvent(req, log);
 }
