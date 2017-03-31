@@ -22,15 +22,21 @@ private static string PlayGame(string player1Url, string player2Url, TraceWriter
     do
     {
         string player1Move = GetMoveFromPlayer(player1Url);
-        log.Info("Player 1 chooses " + player1Move);
+        string player1MoveEventMessage = "Player 1 chooses " + player1Move;
+        ReportEventToPlayer(player2Url, player1MoveEventMessage);
+        log.Info(player1MoveEventMessage);
 
         string player2Move = GetMoveFromPlayer(player2Url);
-        log.Info("Player 2 chooses " + player2Move);
+        string player2MoveEventMessage = "Player 2 chooses " + player2Move;
+        ReportEventToPlayer(player1Url, player2MoveEventMessage);
+        log.Info(player2MoveEventMessage);
 
         gameStatus = DetermineGameStatus(player1Move, player2Move);
-        log.Info(gameStatus);
+
+        if(gameStatus == "Draw")
+            log.Info("Game was a draw. Replaying round.");
     }
-    while(gameStatus == "Draw");
+    while (gameStatus == "Draw");
 
     return gameStatus;
 }
@@ -42,9 +48,9 @@ private static void ReportEventToPlayer(string playerUrl, string eventMessage)
     var request = new RestRequest(Method.POST);
 
     request.AddHeader("Content-type", "application/json");
-    request.AddBody(eventMessage);
+    request.AddJsonBody( new { message = eventMessage } );
 
-    client.Execute(request);
+    var response = client.Execute(request);
 }
 
 private static string DetermineGameStatus(string player1Move, string player2Move)
