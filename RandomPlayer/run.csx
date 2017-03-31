@@ -1,4 +1,6 @@
+#r "Newtonsoft.Json"
 using System.Net;
+using Newtonsoft.Json;
 
 public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 {
@@ -14,9 +16,11 @@ public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 
 private static async void ReceiveGameEvent(HttpRequestMessage req, TraceWriter log)
 {
-    string eventMessage = await req.Content.ReadAsStringAsync();
+    string jsonContent = await req.Content.ReadAsStringAsync();
+    dynamic eventFromGameEngine = JsonConvert.DeserializeObject(jsonContent);
+
+    string eventMessage = eventFromGameEngine.message;
     log.Info("Game engine has posted event with message: " + eventMessage);
-    
 }
 
 private static HttpResponseMessage GetResponseToMoveRequest(HttpRequestMessage req, TraceWriter log)
