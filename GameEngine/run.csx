@@ -82,7 +82,9 @@ private static string GetMoveFromPlayer(string playerUrl)
 
     var response = client.Execute(request);
 
-    return response.Content;
+    string moveWithQuotesStripped = response.Content.Replace("\"", "");
+
+    return moveWithQuotesStripped;
 }
 
 private static string GetPlayer1Url(HttpRequestMessage req)
