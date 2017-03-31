@@ -5,29 +5,46 @@ public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 {
     log.Info("Game starting");
 
-    // parse query parameter
-    string player1URL = GetPlayer1URL(req);
-    string player2URL = GetPlayer2URL(req);
+    string player1Url = GetPlayer1Url(req);
+    string player2Url = GetPlayer2Url(req);
 
-    log.Info("Player 1 is at URL " + player1URL);
-    log.Info("Player 2 is at URL " + player2URL);
+    string gameResult = PlayGame(player1Url, player2Url, log);
 
+    log.Info("Game result was " + gameResult);
+
+    return req.CreateResponse(HttpStatusCode.OK, gameResult);
+}
+
+private static string PlayGame(string player1Url, string player2Url, TraceWriter log)
+{
     string gameStatus = "Draw";
 
     do
     {
-        string player1Move = GetMoveFromPlayer(player1URL);
-        log.Info("Player1 chooses " + player1Move);
+        string player1Move = GetMoveFromPlayer(player1Url);
+        log.Info("Player 1 chooses " + player1Move);
 
-        string player2Move = GetMoveFromPlayer(player2URL);
-        log.Info("Player2 chooses " + player2Move);
+        string player2Move = GetMoveFromPlayer(player2Url);
+        log.Info("Player 2 chooses " + player2Move);
 
         gameStatus = DetermineGameStatus(player1Move, player2Move);
         log.Info(gameStatus);
     }
     while(gameStatus == "Draw");
 
-    return req.CreateResponse(HttpStatusCode.OK, gameStatus);
+    return gameStatus;
+}
+
+private static void ReportEventToPlayer(string playerUrl, string eventMessage)
+{
+    var client = new RestClient(playerUrl);
+
+    var request = new RestRequest(Method.POST);
+
+    request.AddHeader("Content-type", "application/json");
+    request.AddBody(eventMessage);
+
+    client.Execute(request);
 }
 
 private static string DetermineGameStatus(string player1Move, string player2Move)

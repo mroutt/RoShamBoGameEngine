@@ -2,16 +2,32 @@ using System.Net;
 
 public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 {
+    var method = req.Method();
+
+    if(method == HttpMethod.Get)
+        return GetResponseToMoveRequest;
+
+    return ReceiveGameEvent(req, log);
+}
+
+private static void ReceiveGameEvent(HttpRequestMessage req, TraceWriter log)
+{
+    log.Info("Game engine has posted event with message: " + req.Content);
+    req.CreateResponse(HttpStatusCode.Ok);
+}
+
+private static HttpResponseMessage GetResponseToMoveRequest(HttpRequestMessage req, TraceWriter log)
+{
     log.Info("Game engine has requested an action from this player.");
 
     string move = GetMove();
 
     log.Info("Player has chosen " + move);
 
-    return req.CreateResponse(HttpStatusCode.OK, move);
+    return req.CreateResponse(HttpStatusCode.OK, move);    
 }
 
-public static string GetMove()
+private static string GetMove()
 {
     string move = "Player Forfiets";
     int randomNumber = new Random().Next(0, 3);
