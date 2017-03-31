@@ -7,14 +7,16 @@ public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
     if(method == HttpMethod.Get)
         return GetResponseToMoveRequest(req, log);
 
-    return ReceiveGameEvent(req, log);
+    ReceiveGameEvent(req, log);
+
+    return req.CreateResponse(HttpStatusCode.OK);
 }
 
-private static async HttpResponseMessage ReceiveGameEvent(HttpRequestMessage req, TraceWriter log)
+private static async void ReceiveGameEvent(HttpRequestMessage req, TraceWriter log)
 {
     string eventMessage = await req.Content.ReadAsStringAsync().Result;
     log.Info("Game engine has posted event with message: " + eventMessage);
-    return req.CreateResponse(HttpStatusCode.OK);
+    
 }
 
 private static HttpResponseMessage GetResponseToMoveRequest(HttpRequestMessage req, TraceWriter log)
