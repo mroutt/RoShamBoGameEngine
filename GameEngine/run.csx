@@ -1,12 +1,17 @@
+#r "Newtonsoft.Json"
 using System.Net;
 using RestSharp;
+using Newtonsoft.Json;
 
 public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 {
     log.Info("Game starting");
 
-    string player1Url = GetPlayer1Url(req);
-    string player2Url = GetPlayer2Url(req);
+    string jsonContent = req.Content.ReadAsStringAsync().Result;
+    dynamic data = JsonConvert.DeserializeObject(jsonContent);
+
+    string player1Url = data.Player1URL;
+    string player2Url = data.Player2URL;
 
     string gameResult = PlayGame(player1Url, player2Url, log);
 
