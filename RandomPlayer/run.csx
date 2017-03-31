@@ -12,7 +12,8 @@ public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 
 private static HttpResponseMessage ReceiveGameEvent(HttpRequestMessage req, TraceWriter log)
 {
-    log.Info("Game engine has posted event with message: " + req.Content);
+    string eventMessage = await req.Content.ReadAsStringAsync().Result;
+    log.Info("Game engine has posted event with message: " + eventMessage);
     return req.CreateResponse(HttpStatusCode.OK);
 }
 
