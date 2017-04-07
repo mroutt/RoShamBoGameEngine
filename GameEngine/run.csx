@@ -2,6 +2,7 @@
 using System.Net;
 using RestSharp;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
 {
@@ -13,38 +14,40 @@ public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)
     string player1Url = data.Player1URL;
     string player2Url = data.Player2URL;
 
-    string gameResult = PlayGame(player1Url, player2Url, log);
+    var gameEvents = PlayGame(player1Url, player2Url, log);
 
-    log.Info("Game result was " + gameResult);
-
-    return req.CreateResponse(HttpStatusCode.OK, gameResult);
+    return req.CreateResponse(HttpStatusCode.OK, gameEvents);
 }
 
-private static string PlayGame(string player1Url, string player2Url, TraceWriter log)
+private static List<string> PlayGame(string player1Url, string player2Url, TraceWriter log)
 {
     string gameStatus = "Draw";
+    var gameEvents = new List<string>();
 
     do
     {
         string player1Move = GetMoveFromPlayer(player1Url);
         string player1MoveEventMessage = "Player 1 chooses " + player1Move;
         ReportEventToPlayer(player2Url, player1MoveEventMessage);
+        gameEvents.Add(player1MoveEventMessage);
         log.Info(player1MoveEventMessage);
 
         string player2Move = GetMoveFromPlayer(player2Url);
         string player2MoveEventMessage = "Player 2 chooses " + player2Move;
         ReportEventToPlayer(player1Url, player2MoveEventMessage);
+        gameEvents.Add(player2MoveEventMessage);
         log.Info(player2MoveEventMessage);
 
         gameStatus = DetermineGameStatus(player1Move, player2Move);
 
-        if(gameStatus == "Draw")
-            log.Info("Game was a draw. Replaying round.");
+        gameEvents.Add(gameStatus);
+        log.Info(gameStatus);
     }
     while (gameStatus == "Draw");
 
-    return gameStatus;
+    return gameEvents;
 }
+
 
 private static void ReportEventToPlayer(string playerUrl, string eventMessage)
 {
